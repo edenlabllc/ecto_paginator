@@ -1,14 +1,13 @@
 defmodule EctoPaginator do
   @moduledoc false
 
-  alias Ecto.Query
   alias Scrivener.Config
   alias Scrivener.Page
 
   import Ecto.Query
 
   @spec paginate(Ecto.Query.t(), Config.t()) :: Page.t()
-  def paginate(%Query{} = query, %Config{
+  def paginate(query, %Config{
         page_size: page_size,
         page_number: page_number,
         module: repo,
@@ -34,7 +33,23 @@ defmodule EctoPaginator do
     }
   end
 
-  def paginate(%Query{} = entries_query, %Query{} = count_query, %Config{
+  def paginate(entries, total_entries, %Config{
+        page_size: page_size,
+        page_number: page_number
+      })
+      when is_list(entries) and is_integer(total_entries) do
+    total_pages = total_pages(total_entries, page_size)
+
+    %Page{
+      page_size: page_size,
+      page_number: page_number,
+      entries: entries,
+      total_entries: total_entries,
+      total_pages: total_pages
+    }
+  end
+
+  def paginate(entries_query, count_query, %Config{
         page_size: page_size,
         page_number: page_number,
         module: repo,
@@ -53,21 +68,6 @@ defmodule EctoPaginator do
       Keyword.get_lazy(options, :entries, fn ->
         get_entries(entries_query, repo, page_number, total_pages, page_size, caller, options)
       end)
-
-    %Page{
-      page_size: page_size,
-      page_number: page_number,
-      entries: entries,
-      total_entries: total_entries,
-      total_pages: total_pages
-    }
-  end
-
-  def paginate(entries, total_entries, %Config{
-        page_size: page_size,
-        page_number: page_number
-      }) do
-    total_pages = total_pages(total_entries, page_size)
 
     %Page{
       page_size: page_size,
