@@ -34,11 +34,11 @@ defmodule EctoPaginator.Mixfile do
 
   defp deps do
     [
-      {:scrivener, "~> 2.4"},
-      {:ecto, "~> 3.0"},
-      {:ecto_sql, "~> 3.0", only: :test},
-      {:postgrex, ">= 0.0.0", only: :test},
-      {:ex_machina, "~> 2.3", only: [:dev, :test]}
+      {:scrivener, "~> 2.7"},
+      {:ecto, "~> 3.12"},
+      {:ecto_sql, "~> 3.12", only: :test},
+      {:postgrex, ">= 0.20.0", only: :test},
+      {:ex_machina, "~> 2.8.0", only: [:dev, :test]}
     ]
   end
 

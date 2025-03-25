@@ -120,7 +120,7 @@ defmodule EctoPaginator do
   defp aggregate(
          %{
            group_bys: [
-             %Ecto.Query.QueryExpr{
+             %Ecto.Query.ByExpr{
                expr: [
                  {{:., [], [{:&, [], [source_index]}, field]}, [], []} | _
                ]
